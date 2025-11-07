@@ -1,0 +1,127 @@
+<!-- File: index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>L&A Poker</title>
+  <style>
+    :root{--bg:#0b1220;--panel:#0f1a2b;--accent:#d4a017;--muted:#98a0b3}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;background:radial-gradient(circle at 10% 10%, #0f243a 0%, var(--bg) 40%),var(--bg);color:#eaf0ff;overflow-x:hidden}
+    header{display:flex;align-items:center;gap:16px;padding:18px 28px;animation:fadeIn 1.2s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+
+    .logo{display:flex;align-items:center;gap:12px}
+    .brand-mark{width:60px;height:60px;border-radius:10px;background:linear-gradient(135deg,#14283b,#07202f);display:grid;place-items:center;box-shadow:0 8px 24px rgba(2,6,23,.6);}
+    .brand-mark svg{width:44px;height:44px}
+    h1{font-size:20px;margin:0}
+    .credits{font-size:12px;color:var(--muted)}
+
+    main{max-width:1200px;margin:18px auto;padding:20px;display:flex;flex-direction:column;gap:20px;align-items:center}
+    .table-panel{background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.06));border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,.55);width:100%;max-width:1000px;}
+
+    .table{background:linear-gradient(180deg,#104b2a,#09351d);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+    .players{display:flex;justify-content:space-between;align-items:center}
+    .player{width:48%;display:flex;flex-direction:column;gap:8px;align-items:center;animation:slideIn 1s ease}
+    @keyframes slideIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+    .player .name{font-weight:600;font-size:18px}
+    .hand{display:flex;gap:8px;justify-content:center;margin-top:10px}
+
+    .card{width:80px;height:110px;border-radius:10px;background:white;color:#111;display:grid;place-items:center;font-weight:700;font-size:20px;box-shadow:0 6px 14px rgba(2,6,23,.45);transform-origin:center;transition:transform .25s ease,box-shadow .25s ease;position:relative;overflow:hidden}
+    .card:before{content:'';position:absolute;inset:0;border-radius:10px;background:radial-gradient(circle at top left,rgba(255,255,255,.3),transparent);opacity:.5;pointer-events:none}
+    .card:hover{transform:scale(1.1) rotate(3deg);box-shadow:0 10px 20px rgba(0,0,0,.6)}
+    .card.hidden{background:linear-gradient(135deg,#0e2b44,#083049);color:transparent}
+
+    .controls{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+    button{background:var(--accent);border:none;padding:10px 14px;border-radius:8px;color:#081018;font-weight:700;cursor:pointer;transition:all .2s}
+    button:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(212,160,23,.3)}
+    button.secondary{background:transparent;color:var(--accent);border:1px solid rgba(212,160,23,.3)}
+
+    .chips{display:flex;gap:8px;align-items:center;justify-content:center}
+    .chip{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-weight:800;box-shadow:0 6px 12px rgba(2,6,23,.5);cursor:pointer;transform:translateY(0);transition:transform .12s, box-shadow .12s}
+    .chip:hover{transform:translateY(-4px);box-shadow:0 8px 18px rgba(2,6,23,.7)}
+    .chip:active{transform:translateY(2px)}
+    .chip[data-value="1"]{background:linear-gradient(180deg,#fff,#f1f1f1);color:#111;border:4px solid #ddd}
+    .chip[data-value="5"]{background:linear-gradient(180deg,#ffe6b3,#ffd98f);color:#4b2d00;border:4px solid #f0c070}
+    .chip[data-value="25"]{background:linear-gradient(180deg,#ffdfe6,#ffb3c7);color:#4b0922;border:4px solid #ff9ab2}
+    .chip[data-value="100"]{background:linear-gradient(180deg,#d0e6ff,#9fc7ff);color:#08385b;border:4px solid #7fb8ff}
+
+    .pot{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px}
+    .pile{width:72px;height:72px;border-radius:50%;background:linear-gradient(180deg,#2b2b2b,#121212);display:grid;place-items:center;font-weight:800;color:#ffd98f;animation:glow 1.2s ease-in-out infinite alternate}
+    @keyframes glow{from{box-shadow:0 0 10px rgba(212,160,23,.2);}to{box-shadow:0 0 20px rgba(212,160,23,.6);}}
+
+    footer{max-width:1100px;margin:12px auto;color:var(--muted);text-align:center;font-size:13px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="brand-mark">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 44c6-4 12-8 18-12" stroke="#d4a017" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M44 18c0 6-6 10-6 16 0 8 6 10 6 10s6-2 6-10c0-6-6-10-6-16z" fill="#d4a017"/>
+        </svg>
+      </div>
+      <div>
+        <h1>L&A Poker</h1>
+        <div class="credits">Made by Louis McAuley &amp; Alex Davis</div>
+      </div>
+    </div>
+    <a href="guide.html" style="margin-left:auto;color:var(--muted);text-decoration:none">Rules &amp; Guide</a>
+  </header>
+
+  <main>
+    <section class="table-panel table">
+      <div class="players">
+        <div class="player" id="player1">
+          <div class="name">Player 1 <span class="muted" id="p1-chips">(Chips: 500)</span></div>
+          <div class="hand" id="p1-hand"></div>
+        </div>
+        <div class="player" id="player2">
+          <div class="name">Player 2 <span class="muted" id="p2-chips">(Chips: 500)</span></div>
+          <div class="hand" id="p2-hand"></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="chips" id="chip-palette">
+          <div class="chip" data-value="1">1</div>
+          <div class="chip" data-value="5">5</div>
+          <div class="chip" data-value="25">25</div>
+          <div class="chip" data-value="100">100</div>
+        </div>
+        <button id="deal-btn">Deal</button>
+        <button id="reveal-btn" class="secondary" disabled>Reveal</button>
+      </div>
+
+      <div class="pot"><div class="pile" id="pot">0</div><div class="muted">Pot</div></div>
+    </section>
+  </main>
+
+  <footer>Harp City Poker — Built by Louis McAuley &amp; Alex Davis</footer>
+
+  <script>
+    const suits=['♠','♥','♦','♣'];const ranks=['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+    function newDeck(){let d=[];for(const s of suits)for(const r of ranks)d.push({suit:s,rank:r,code:r+s});return d;}
+    function shuffle(deck){for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}}
+    function cardEl(card,hidden=false){const div=document.createElement('div');div.className='card'+(hidden?' hidden':'');div.textContent=hidden?'':card.code;return div;}
+
+    function evaluate(cards){const map={'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':11,'Q':12,'K':13,'A':14};const vals=cards.map(c=>map[c.rank]).sort((a,b)=>b-a);const suitsArr=cards.map(c=>c.suit);const counts={};for(const v of vals)counts[v]=(counts[v]||0)+1;const uniqueVals=Object.keys(counts).map(Number).sort((a,b)=>b-a);const isFlush=suitsArr.every(s=>s===suitsArr[0]);let isStraight=false;{const sortedAsc=vals.slice().sort((a,b)=>a-b);let ok=true;for(let i=1;i<sortedAsc.length;i++)if(sortedAsc[i]!==sortedAsc[i-1]+1)ok=false;const wheel=JSON.stringify(sortedAsc)===JSON.stringify([2,3,4,5,14]);if(ok||wheel)isStraight=true;}const countsArr=Object.entries(counts).map(([v,c])=>({v:Number(v),c})).sort((a,b)=>{if(b.c!==a.c)return b.c-a.c;return b.v-a.v});if(isStraight&&isFlush)return{rank:9,tie:[Math.max(...vals)]};if(countsArr[0].c===4)return{rank:8,tie:[countsArr[0].v]};if(countsArr[0].c===3&&countsArr[1]&&countsArr[1].c===2)return{rank:7,tie:[countsArr[0].v,countsArr[1].v]};if(isFlush)return{rank:6,tie:vals};if(isStraight)return{rank:5,tie:[Math.max(...vals)]};if(countsArr[0].c===3)return{rank:4,tie:[countsArr[0].v]};if(countsArr[0].c===2&&countsArr[1]&&countsArr[1].c===2)return{rank:3,tie:[countsArr[0].v,countsArr[1].v]};if(countsArr[0].c===2)return{rank:2,tie:[countsArr[0].v]};return{rank:1,tie:vals};}
+    function compare(a,b){if(a.rank!==b.rank)return a.rank>b.rank?1:-1;for(let i=0;i<Math.max(a.tie.length,b.tie.length);i++){const av=a.tie[i]||0,bv=b.tie[i]||0;if(av!==bv)return av>bv?1:-1;}return 0;}
+
+    let deck=[],p1=[],p2=[],pot=0,bank1=500,bank2=500,turn=1;
+    const p1Hand=document.getElementById('p1-hand'),p2Hand=document.getElementById('p2-hand'),p1Chips=document.getElementById('p1-chips'),p2Chips=document.getElementById('p2-chips'),potEl=document.getElementById('pot');
+
+    document.querySelectorAll('.chip').forEach(ch=>{ch.onclick=()=>{const v=Number(ch.dataset.value);if(turn===1&&bank1>=v){bank1-=v;pot+=v;p1Chips.textContent=`(Chips: ${bank1})`;}else if(turn===2&&bank2>=v){bank2-=v;pot+=v;p2Chips.textContent=`(Chips: ${bank2})`;}potEl.textContent=pot;turn=turn===1?2:1;}});
+
+    function deal(){deck=newDeck();shuffle(deck);p1=deck.splice(0,5);p2=deck.splice(0,5);p1Hand.innerHTML='';p2Hand.innerHTML='';for(const c of p1)p1Hand.appendChild(cardEl(c));for(const c of p2)p2Hand.appendChild(cardEl(c,true));document.getElementById('reveal-btn').disabled=false;document.getElementById('deal-btn').disabled=true;}
+    function reveal(){p2Hand.innerHTML='';for(const c of p2)p2Hand.appendChild(cardEl(c));const e1=evaluate(p1),e2=evaluate(p2);const res=compare(e1,e2);let msg='';if(res>0){msg='Player 1 wins!';bank1+=pot;}else if(res<0){msg='Player 2 wins!';bank2+=pot;}else{msg='It\'s a tie!';bank1+=pot/2;bank2+=pot/2;}alert(msg);p1Chips.textContent=`(Chips: ${Math.floor(bank1)})`;p2Chips.textContent=`(Chips: ${Math.floor(bank2)})`;pot=0;potEl.textContent=0;document.getElementById('deal-btn').disabled=false;document.getElementById('reveal-btn').disabled=true;}
+
+    document.getElementById('deal-btn').onclick=deal;document.getElementById('reveal-btn').onclick=reveal;
+  </script>
+</body>
+</html>
+
+<!-- File: guide.html (unchanged) -->
