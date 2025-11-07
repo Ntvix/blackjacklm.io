@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Louis McAuley Blackjack Version 1.0</title>
+<title>LA Blackjack</title></title>
 <style>
 :root{
   --felt:#0b6b3a;--felt-dark:#09542d;--gold:#d4af37;--muted:#cbd5e1;--card-white:#fff;--bg:#041014;
@@ -605,7 +605,621 @@ function showPlayerBjBadge(pid){
   setTimeout(()=> badge.classList.remove('show'), 2200);
 }
 function showGlobalBjBanner(){
+  globalBjBanner.class<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LA Blackjack</title></title>
+<style>
+:root{
+  --felt:#0b6b3a;--felt-dark:#09542d;--gold:#d4af37;--muted:#cbd5e1;--card-white:#fff;--bg:#041014;
+  --transition-fast: 200ms;
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+html,body{height:100%;margin:0;background:var(--bg);color:#fff;transition:background var(--transition-fast) ease}
+.container{max-width:1200px;margin:28px auto;padding:20px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.title{color:var(--gold);font-weight:700}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:16px}
+.sidebar{display:flex;flex-direction:column;gap:12px}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.25));padding:12px;border-radius:10px;transition:box-shadow var(--transition-fast)}
+.table{background:linear-gradient(180deg,var(--felt),var(--felt-dark));border-radius:12px;padding:18px;box-shadow:inset 0 -8px 24px rgba(0,0,0,0.5);min-height:520px;transition:background var(--transition-fast), box-shadow var(--transition-fast);position:relative;overflow:hidden}
+.table-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.hand{display:flex;gap:10px;align-items:flex-end}
+.card{width:84px;height:120px;border-radius:10px;background:var(--card-white);color:#111;font-weight:800;display:flex;flex-direction:column;justify-content:space-between;padding:10px;box-shadow:0 12px 30px rgba(0,0,0,0.45);transition:transform .25s, box-shadow .2s, opacity .2s}
+.card.small{width:64px;height:90px;padding:6px}
+.card.hidden{background:linear-gradient(180deg,#0f3d27,#0b2d1f);color:transparent}
+.card.deal-anim{transform: translateY(-20px) scale(0.9); opacity:0}
+.controls{display:flex;gap:8px;margin-top:8px}
+button{background:var(--gold);border:none;padding:8px 12px;border-radius:8px;color:#081014;cursor:pointer;font-weight:700;transition:transform .12s, box-shadow .12s}
+button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+button:active{transform:translateY(1px)}
+.chip-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+.chip{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,0.6);cursor:pointer;transition:transform .12s}
+.chip:hover{transform:scale(1.06)}
+.chip.gold{background:var(--gold);color:#111}
+.chip.blue{background:#1e40af}
+.chip.red{background:#b91c1c}
+.small{font-size:13px;color:var(--muted)}
+.score{font-weight:800;color:var(--gold)}
+.status{margin-top:10px;padding:10px;border-radius:8px;background:rgba(0,0,0,0.28);color:var(--muted);min-height:56px;transition:opacity var(--transition-fast)}
+.player-active{outline:3px solid rgba(212,175,55,0.14);box-shadow:0 6px 20px rgba(212,175,55,0.08)}
+.players{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.player-box{padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(0,0,0,0.15));position:relative;overflow:visible}
+.badge{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#111;color:var(--gold);font-weight:800;position:relative;z-index:2}
+.suit.red{color:#b91c1c}
+.suit.black{color:#111}
+.theme-switch{display:flex;gap:8px;align-items:center}
+.theme-btn{padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;cursor:pointer}
+.bg-emerald{--felt:#0b6b3a;--felt-dark:#09542d;--bg:linear-gradient(180deg,#072116,#041014)}
+.bg-ruby{--felt:#6b0f0f;--felt-dark:#3b0707;--bg:linear-gradient(180deg,#2b0505,#120405)}
+.bg-midnight{--felt:#0b2a47;--felt-dark:#062033;--bg:linear-gradient(180deg,#081029,#020417)}
+.bg-carbon{--felt:#262626;--felt-dark:#0f0f0f;--bg:linear-gradient(180deg,#0b0b0b,#020202)}
+.active-glow{box-shadow:0 8px 40px rgba(212,175,55,0.12);transform:translateY(-2px)}
+
+/* Blackjack banner */
+.bj-banner{
+  position:absolute;left:50%;transform:translateX(-50%) translateY(-30px);top:28%;
+  background:linear-gradient(90deg, rgba(212,175,55,1), rgba(255,220,120,0.95));
+  color:#081014;padding:10px 20px;border-radius:10px;font-weight:900;font-size:20px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.45);opacity:0;pointer-events:none;transition:transform .35s ease, opacity .35s ease;z-index:40
+}
+.bj-banner.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* chip fly animation container */
+.chip-fly{
+  position:absolute;pointer-events:none;z-index:60;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;background:var(--gold);color:#081014;box-shadow:0 8px 30px rgba(0,0,0,0.4);opacity:0;transform:translateY(0) scale(0.8);transition:transform .9s cubic-bezier(.2,.8,.2,1), opacity .9s}
+.chip-fly.show{opacity:1;transform:translateY(-120px) scale(1.1)}
+
+/* player area small banner */
+.player-bj-badge{position:absolute;top:8px;left:8px;background:rgba(212,175,55,0.95);color:#081014;padding:6px 10px;border-radius:8px;font-weight:800;opacity:0;transform:translateY(-8px);transition:opacity .35s, transform .35s;z-index:30}
+.player-bj-badge.show{opacity:1;transform:translateY(0)}
+
+/* responsive */
+@media (max-width:980px){.layout{grid-template-columns:1fr}.players{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="bg-emerald">
+<div class="container">
+  <div class="header">
+    <div>
+      <div class="title">Classic Casino — Blackjack (Deluxe)</div>
+      <div class="small">Dealer hits soft 17 • Double & Split enabled</div>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center">
+      <div class="theme-switch small">
+        Theme:
+        <button class="theme-btn" data-theme="emerald">Emerald</button>
+        <button class="theme-btn" data-theme="ruby">Ruby</button>
+        <button class="theme-btn" data-theme="midnight">Midnight</button>
+        <button class="theme-btn" data-theme="carbon">Carbon</button>
+      </div>
+      <div class="small">Playable locally — chips persist between reloads</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="small">Player 1</div>
+            <div>Chips: <span id="p1Chips" class="score">1500</span></div>
+          </div>
+          <div class="badge" id="p1Badge">P1</div>
+        </div>
+        <div class="chip-row">
+          <div class="chip gold" data-value="500">500</div>
+          <div class="chip blue" data-value="100">100</div>
+          <div class="chip red" data-value="25">25</div>
+          <div class="chip" style="background:#111;color:#fff" id="p1Clear">CLR</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="p1Place">Place Bet</button>
+          <button id="p1Reset" class="secondary">Reset Chips</button>
+        </div>
+        <div id="p1Info" class="small" style="margin-top:8px">Status: waiting</div>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="small">Player 2</div>
+            <div>Chips: <span id="p2Chips" class="score">1500</span></div>
+          </div>
+          <div class="badge" id="p2Badge">P2</div>
+        </div>
+        <div class="chip-row">
+          <div class="chip gold" data-value="500">500</div>
+          <div class="chip blue" data-value="100">100</div>
+          <div class="chip red" data-value="25">25</div>
+          <div class="chip" style="background:#111;color:#fff" id="p2Clear">CLR</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="p2Place">Place Bet</button>
+          <button id="p2Reset" class="secondary">Reset Chips</button>
+        </div>
+        <div id="p2Info" class="small" style="margin-top:8px">Status: waiting</div>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center"><strong>Table</strong><div class="small">Round controls</div></div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button id="deal">Deal</button>
+          <button id="nextRound" class="secondary">Next Round</button>
+          <button id="resetAll" class="secondary">Reset All</button>
+        </div>
+        <div class="status" id="status">Waiting for bets...</div>
+        <div class="small" style="margin-top:8px">Blackjack auto-win bonus: <strong id="bjBonusLabel">x3 (change in code)</strong></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="table panel" id="tablePanel">
+        <div class="bj-banner" id="globalBjBanner">BLACKJACK!</div>
+
+        <div class="table-top">
+          <div><strong>Dealer</strong> <span class="small" style="margin-left:8px">Score: <span id="dealerScore">?</span></span></div>
+          <div class="small">Turn: <strong id="turnLabel">Awaiting bets</strong></div>
+        </div>
+
+        <div id="dealerHand" class="hand" aria-label="Dealer hand"></div>
+
+        <div style="margin-top:18px" class="players">
+          <div id="p1Area" class="player-box">
+            <div class="player-bj-badge" id="p1BjBadge">BLACKJACK!</div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><strong>Player 1</strong><div class="small">Bet: <span id="p1CurrentBet">0</span></div></div>
+            <div id="p1HandArea" class="hand" style="margin-top:8px;min-height:140px"></div>
+            <div class="controls" id="p1Controls">
+              <button id="p1Hit">Hit</button>
+              <button id="p1Stand" class="secondary">Stand</button>
+              <button id="p1Double" class="secondary">Double</button>
+              <button id="p1Split" class="secondary">Split</button>
+            </div>
+          </div>
+<div class="small" style="font-weight:600;color:var(--gold)">Made by Louis McAuley & Alex Davis</div>
+
+          <div id="p2Area" class="player-box">
+            <div class="player-bj-badge" id="p2BjBadge">BLACKJACK!</div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><strong>Player 2</strong><div class="small">Bet: <span id="p2CurrentBet">0</span></div></div>
+            <div id="p2HandArea" class="hand" style="margin-top:8px;min-height:140px"></div>
+            <div class="controls" id="p2Controls">
+              <button id="p2Hit">Hit</button>
+              <button id="p2Stand" class="secondary">Stand</button>
+              <button id="p2Double" class="secondary">Double</button>
+              <button id="p2Split" class="secondary">Split</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- =================================================== -->
+<!-- 🔥 Firebase SDK and Configuration Block             -->
+<!-- =================================================== -->
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database-compat.js"></script>
+<script>
+  // 🔥 Replace with your Firebase config from the Firebase Console
+const firebaseConfig = {
+  apiKey: "AIzaSyADXRfxxVKEsQyilJOoZvufhY9ZalzkAxU",
+  authDomain: "realblack-719eb.firebaseapp.com",
+  databaseURL: "https://realblack-719eb-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "realblack-719eb",
+  storageBucket: "realblack-719eb.firebasestorage.app",
+  messagingSenderId: "751398686405",
+  appId: "1:751398686405:web:163527ff4e1286ab916aac",
+  measurementId: "G-FM88MPNBLW"
+};
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // ✅ Optional: test connection in console
+  db.ref("test_connection").set({ time: Date.now(), msg: "Blackjack Firebase Connected!" });
+  db.ref("test_connection").on("value", snap => {
+    console.log("✅ Firebase connected:", snap.val());
+  });
+</script>
+<!-- =================================================== -->
+<!-- End Firebase Block                                  -->
+<!-- =================================================== -->
+
+<script>
+// ========== CONFIG ==========
+const BJ_EXTRA_MULT = 3.0; // instant blackjack payout multiplier (e.g. 3.0 => bet * 3 paid immediately)
+document.getElementById('bjBonusLabel').textContent = 'x' + BJ_EXTRA_MULT + ' (instant auto-pay)';
+
+// folder structure note (place your images in media/backgrounds/):
+// media/backgrounds/emerald.jpg, ruby.jpg, midnight.jpg, carbon.jpg
+const BACKGROUND_FOLDER = './media/backgrounds/';
+
+// ========== Deck & helpers ==========
+const suits = ['♠','♥','♦','♣'];
+const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+function newDeck(){const d=[];for(const s of suits)for(const r of ranks)d.push({rank:r,suit:s});return d}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function cardText(c){return c.rank + c.suit}
+function calcScore(hand){let total=0, aces=0;for(const c of hand){if(c.rank==='A'){aces++; total+=11}else if(['J','Q','K'].includes(c.rank)) total+=10;else total+=Number(c.rank)}while(total>21 && aces>0){total-=10;aces--}return {total,acesAs11:aces}}
+function isSoft17(hand){let total=0, aces=0;for(const c of hand){if(c.rank==='A'){aces++; total+=11}else if(['J','Q','K'].includes(c.rank)) total+=10;else total+=Number(c.rank)}return total===17 && aces>0}
+
+// ========== DOM refs ==========
+const dealerHandEl = document.getElementById('dealerHand');
+const dealerScoreEl = document.getElementById('dealerScore');
+const p1HandArea = document.getElementById('p1HandArea');
+const p2HandArea = document.getElementById('p2HandArea');
+const p1ChipsEl = document.getElementById('p1Chips');
+const p2ChipsEl = document.getElementById('p2Chips');
+const p1Place = document.getElementById('p1Place');
+const p2Place = document.getElementById('p2Place');
+const p1Reset = document.getElementById('p1Reset');
+const p2Reset = document.getElementById('p2Reset');
+const p1Info = document.getElementById('p1Info');
+const p2Info = document.getElementById('p2Info');
+const dealBtn = document.getElementById('deal');
+const nextRoundBtn = document.getElementById('nextRound');
+const resetAllBtn = document.getElementById('resetAll');
+const statusEl = document.getElementById('status');
+const turnLabel = document.getElementById('turnLabel');
+const p1CurrentBetEl = document.getElementById('p1CurrentBet');
+const p2CurrentBetEl = document.getElementById('p2CurrentBet');
+const p1Hit = document.getElementById('p1Hit');
+const p1Stand = document.getElementById('p1Stand');
+const p1Double = document.getElementById('p1Double');
+const p1Split = document.getElementById('p1Split');
+const p2Hit = document.getElementById('p2Hit');
+const p2Stand = document.getElementById('p2Stand');
+const p2Double = document.getElementById('p2Double');
+const p2Split = document.getElementById('p2Split');
+const p1Area = document.getElementById('p1Area');
+const p2Area = document.getElementById('p2Area');
+const p1BjBadge = document.getElementById('p1BjBadge');
+const p2BjBadge = document.getElementById('p2BjBadge');
+const globalBjBanner = document.getElementById('globalBjBanner');
+const tablePanel = document.getElementById('tablePanel');
+const p1Badge = document.getElementById('p1Badge');
+const p2Badge = document.getElementById('p2Badge');
+
+// ========== State ==========
+let deck, dealerHand, players, dealerHidden=true, gameInProgress=false;
+let turn = {player:1,handIndex:0};
+let tempBets = {p1:0,p2:0};
+
+// ========== Persistence ==========
+function loadState(){
+  const s1 = localStorage.getItem('blackjack_p1');
+  const s2 = localStorage.getItem('blackjack_p2');
+  const theme = localStorage.getItem('blackjack_theme');
+  const chips1 = s1? Number(s1):1500; const chips2 = s2? Number(s2):1500;
+  players = {
+    1:{chips:chips1,bet:0,hands:[],placed:false,info:'waiting',origBets:[],settledHands:[]},
+    2:{chips:chips2,bet:0,hands:[],placed:false,info:'waiting',origBets:[],settledHands:[]}
+  };
+  if(theme) applyTheme(theme, true);
+}
+function saveState(){ localStorage.setItem('blackjack_p1', players[1].chips); localStorage.setItem('blackjack_p2', players[2].chips) }
+
+function resetState(){ deck = shuffle(newDeck()); dealerHand=[]; dealerHidden=true; gameInProgress=false; turn={player:1,handIndex:0}; tempBets={p1:0,p2:0}; loadState(); updateUI(); statusEl.textContent='Place chips to build bets.'; turnLabel.textContent='Awaiting bets' }
+
+function updateTempBets(){ p1CurrentBetEl.textContent = tempBets.p1; p2CurrentBetEl.textContent = tempBets.p2 }
+
+function elCard(c, hidden=false){ const d=document.createElement('div'); d.className='card' + (hidden? ' hidden':''); if(!hidden){ const isRed = (c.suit==='♥' || c.suit==='♦'); d.innerHTML = `<div class="tl"><span class="suit ${isRed? 'red':'black'}">${c.rank}${c.suit}</span></div><div class="br"><span class="suit ${isRed? 'red':'black'}">${c.rank}${c.suit}</span></div>` } return d }
+
+// ========== UI update ==========
+function updateUI(){ dealerHandEl.innerHTML=''; dealerScoreEl.textContent = dealerHidden? '?': calcScore(dealerHand).total; p1HandArea.innerHTML=''; p2HandArea.innerHTML=''; p1ChipsEl.textContent = players[1].chips; p2ChipsEl.textContent = players[2].chips; p1CurrentBetEl.textContent = players[1].bet || tempBets.p1; p2CurrentBetEl.textContent = players[2].bet || tempBets.p2; p1Info.textContent = 'Status: ' + players[1].info; p2Info.textContent = 'Status: ' + players[2].info; dealerHand.forEach((c,i)=> dealerHandEl.appendChild(elCard(c, i===0 && dealerHidden)));
+
+  // players
+  ['1','2'].forEach(pid=>{
+    const p = players[pid]; const area = pid==='1'? p1HandArea : p2HandArea;
+    if(p.hands.length===0) area.innerHTML = '<div class="small">No hand</div>';
+    else{
+      area.innerHTML = '';
+      p.hands.forEach((hand, idx)=>{
+        const wrap=document.createElement('div'); wrap.style.display='inline-block'; wrap.style.marginRight='12px';
+        const info=document.createElement('div'); info.className='small'; info.style.textAlign='center';
+        const settled = p.settledHands[idx];
+        info.textContent = (idx===0? 'Main':'Split') + ' ('+ calcScore(hand).total +')' + (settled? ' — PAID':'');
+        const cards=document.createElement('div'); cards.style.display='flex'; cards.style.gap='8px'; cards.style.marginTop='6px';
+        hand.forEach(c=>{ const cd = elCard(c); cards.appendChild(cd); })
+        wrap.appendChild(info); wrap.appendChild(cards); area.appendChild(wrap);
+      })
+    }
+  });
+
+  // highlight current player
+  p1Area.classList.toggle('player-active', gameInProgress && turn.player===1 && !isCurrentHandSettled());
+  p2Area.classList.toggle('player-active', gameInProgress && turn.player===2 && !isCurrentHandSettled());
+
+  // enable/disable controls
+  [p1Hit,p1Stand,p1Double,p1Split,p2Hit,p2Stand,p2Double,p2Split].forEach(b=>b.disabled=true);
+  if(gameInProgress){
+    if(isCurrentHandSettled()){ advanceTurn(); return; }
+    const cp = players[turn.player]; const hand = cp.hands[turn.handIndex];
+    if(hand){
+      if(turn.player===1){
+        p1Hit.disabled=false; p1Stand.disabled=false;
+        p1Double.disabled=(hand.length!==2 || cp.chips < (cp.origBets[turn.handIndex] || cp.bet));
+        p1Split.disabled=(hand.length!==2 || hand[0].rank!==hand[1].rank || cp.chips < (cp.origBets[turn.handIndex] || cp.bet));
+      } else {
+        p2Hit.disabled=false; p2Stand.disabled=false;
+        p2Double.disabled=(hand.length!==2 || cp.chips < (cp.origBets[turn.handIndex] || cp.bet));
+        p2Split.disabled=(hand.length!==2 || hand[0].rank!==hand[1].rank || cp.chips < (cp.origBets[turn.handIndex] || cp.bet));
+      }
+    }
+  }
+}
+
+// check if current active hand has been auto-settled (so should be skipped)
+function isCurrentHandSettled(){
+  const cp = players[turn.player];
+  if(!cp || !cp.settledHands) return false;
+  return !!cp.settledHands[turn.handIndex];
+}
+
+// ========== Betting handlers ==========
+document.querySelectorAll('.chip-row .chip[data-value]').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    const v = Number(el.dataset.value);
+    const parent = el.closest('.panel');
+    if(parent.querySelector('#p1Place')){ tempBets.p1 += v; updateTempBets() } else { tempBets.p2 += v; updateTempBets() }
+  })
+});
+document.getElementById('p1Clear').addEventListener('click', ()=>{ tempBets.p1=0; updateTempBets() });
+document.getElementById('p2Clear').addEventListener('click', ()=>{ tempBets.p2=0; updateTempBets() });
+
+p1Place.addEventListener('click', ()=>{
+  if(tempBets.p1<=0){ statusEl.textContent='Player 1: pick chips to bet.'; return }
+  if(tempBets.p1>players[1].chips){ statusEl.textContent='Player 1: insufficient chips.'; return }
+  players[1].bet = tempBets.p1; players[1].chips -= players[1].bet; players[1].placed=true; players[1].info='Bet placed: '+players[1].bet; players[1].origBets = []; players[1].settledHands = []; tempBets.p1=0; updateUI(); statusEl.textContent='Player 1 bet placed.'; saveState();
+});
+p2Place.addEventListener('click', ()=>{
+  if(tempBets.p2<=0){ statusEl.textContent='Player 2: pick chips to bet.'; return }
+  if(tempBets.p2>players[2].chips){ statusEl.textContent='Player 2: insufficient chips.'; return }
+  players[2].bet = tempBets.p2; players[2].chips -= players[2].bet; players[2].placed=true; players[2].info='Bet placed: '+players[2].bet; players[2].origBets = []; players[2].settledHands = []; tempBets.p2=0; updateUI(); statusEl.textContent='Player 2 bet placed.'; saveState();
+});
+
+p1Reset.addEventListener('click', ()=>{ players[1].chips=1500; players[1].bet=0; players[1].placed=false; players[1].info='reset'; players[1].settledHands = []; updateUI(); saveState(); statusEl.textContent='Player 1 chips reset to 1500.' });
+p2Reset.addEventListener('click', ()=>{ players[2].chips=1500; players[2].bet=0; players[2].placed=false; players[2].info='reset'; players[2].settledHands = []; updateUI(); saveState(); statusEl.textContent='Player 2 chips reset to 1500.' });
+
+// ========== Theme handling (with optional local images) ==========
+function applyTheme(theme, silent){
+  // set body class for CSS gradients
+  document.body.classList.remove('bg-emerald','bg-ruby','bg-midnight','bg-carbon');
+  document.body.classList.add('bg-'+theme);
+
+  // try to load image from media/backgrounds/<theme>.jpg - if found, use as table background
+  const imgPath = BACKGROUND_FOLDER + theme + '.jpg';
+  const img = new Image();
+  img.onload = ()=> {
+    tablePanel.style.backgroundImage = `url("${imgPath}")`;
+    tablePanel.style.backgroundSize = 'cover';
+    tablePanel.style.backgroundPosition = 'center';
+    if(!silent) statusEl.textContent = 'Theme: ' + theme + ' (image loaded)';
+  };
+  img.onerror = ()=> {
+    tablePanel.style.backgroundImage = ''; // fallback to CSS gradient
+    if(!silent) statusEl.textContent = 'Theme: ' + theme + ' (gradient)';
+  };
+  img.src = imgPath; // triggers load/error
+
+  // persist selection
+  localStorage.setItem('blackjack_theme', theme);
+}
+// attach theme buttons
+document.querySelectorAll('.theme-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> { const t = btn.dataset.theme; applyTheme(t); })
+});
+
+// ========== Deal flow ==========
+dealBtn.addEventListener('click', async ()=>{
+  if(!players[1].placed && !players[2].placed){ statusEl.textContent='At least one player must place a bet.'; return }
+  deck = shuffle(newDeck()); dealerHand = []; dealerHidden=true; gameInProgress=true;
+
+  // deal initial cards (dealer face-down first, then players, then dealer face-up)
+  dealerHand.push(deck.pop()); // dealer hidden
+  players[1].hands = players[1].placed? [[deck.pop(), deck.pop()]] : [];
+  players[2].hands = players[2].placed? [[deck.pop(), deck.pop()]] : [];
+  if(players[1].placed) players[1].origBets = [players[1].bet];
+  if(players[2].placed) players[2].origBets = [players[2].bet];
+  dealerHand.push(deck.pop());
+
+  if(players[1].placed) players[1].settledHands = [false];
+  if(players[2].placed) players[2].settledHands = [false];
+
+  turn.player = players[1].placed? 1 : 2; turn.handIndex=0;
+  players[1].info = players[1].placed? 'Playing':'No bet'; players[2].info = players[2].placed? 'Waiting':'No bet';
+  statusEl.textContent = 'Dealt. Preparing...';
+  updateUI();
+  await animateInitialDeal();
+
+  // check for immediate blackjack and auto-pay
+  [1,2].forEach(pid=>{
+    if(players[pid].hands.length>0){
+      const hand = players[pid].hands[0];
+      const s = calcScore(hand).total;
+      if(s===21 && hand.length===2){
+        const betAmount = players[pid].origBets[0] || players[pid].bet;
+        const payout = Math.floor(betAmount * BJ_EXTRA_MULT);
+        players[pid].chips += payout;
+        players[pid].settledHands[0] = true;
+        players[pid].info = 'Blackjack! Instant win paid';
+        statusEl.textContent += ` Player ${pid} has Blackjack — paid x${BJ_EXTRA_MULT}.`;
+        // show visual cue: badge + big banner + chip animation
+        showPlayerBjBadge(pid);
+        showGlobalBjBanner();
+        animateChipPayout(pid, payout);
+      }
+    }
+  });
+
+  updateUI();
+  if(isCurrentHandSettled()) advanceTurn(); else statusEl.textContent = 'Player ' + turn.player + ' to act';
+  saveState();
+});
+
+// animate reveal of initial cards (deal feel)
+async function animateInitialDeal(){
+  const revealEls = [];
+  dealerHandEl.innerHTML=''; dealerHand.forEach((c,i)=>{ const el = elCard(c, i===0 && dealerHidden); el.classList.add('deal-anim'); dealerHandEl.appendChild(el); revealEls.push(el) });
+  p1HandArea.innerHTML=''; if(players[1].hands.length>0){ players[1].hands.forEach(hand=>{ const wrap=document.createElement('div'); wrap.style.display='inline-block'; wrap.style.marginRight='12px'; const cards=document.createElement('div'); cards.style.display='flex'; cards.style.gap='8px'; cards.style.marginTop='6px'; hand.forEach(c=>{ const cd = elCard(c); cd.classList.add('deal-anim'); cards.appendChild(cd); revealEls.push(cd)}); wrap.appendChild(cards); p1HandArea.appendChild(wrap) })}
+  p2HandArea.innerHTML=''; if(players[2].hands.length>0){ players[2].hands.forEach(hand=>{ const wrap=document.createElement('div'); wrap.style.display='inline-block'; wrap.style.marginRight='12px'; const cards=document.createElement('div'); cards.style.display='flex'; cards.style.gap='8px'; cards.style.marginTop='6px'; hand.forEach(c=>{ const cd = elCard(c); cd.classList.add('deal-anim'); cards.appendChild(cd); revealEls.push(cd)}); wrap.appendChild(cards); p2HandArea.appendChild(wrap) })}
+  for(let i=0;i<revealEls.length;i++){
+    const el = revealEls[i];
+    await pause(100);
+    el.classList.remove('deal-anim');
+    el.style.transform = ''; el.style.opacity = '1';
+  }
+}
+
+// ========== Turn progression ==========
+function advanceTurn(){
+  if(turn.player===1){
+    const p = players[1];
+    if(p.hands.length>turn.handIndex+1){
+      turn.handIndex++; statusEl.textContent = 'Player 1 (split) to act'; updateUI(); return;
+    }
+    if(players[2].placed){
+      turn.player=2; turn.handIndex=0;
+      players[1].info = 'Done';
+      players[2].info = players[2].placed? 'Playing':'No bet';
+      if(isCurrentHandSettled()){ advanceTurn(); return; }
+      statusEl.textContent = 'Player 2 to act'; updateUI(); return;
+    } else {
+      players[1].info='Done'; startDealer(); return;
+    }
+  } else if(turn.player===2){
+    const p = players[2];
+    if(p.hands.length>turn.handIndex+1){
+      turn.handIndex++; statusEl.textContent = 'Player 2 (split) to act'; updateUI(); return;
+    } else {
+      players[2].info='Done'; startDealer(); return;
+    }
+  }
+  updateUI();
+}
+
+// ========== Dealer play & settlement ==========
+async function startDealer(){
+  dealerHidden=false; updateUI(); statusEl.textContent='Dealer reveals card.'; await pause(600);
+  while(true){
+    const sc = calcScore(dealerHand).total;
+    if(sc<17){ dealerHand.push(deck.pop()); statusEl.textContent='Dealer hits.'; updateUI(); await pause(600); continue }
+    if(sc===17 && isSoft17(dealerHand)){ dealerHand.push(deck.pop()); statusEl.textContent='Dealer hits soft 17.'; updateUI(); await pause(600); continue }
+    break;
+  }
+  statusEl.textContent = 'Dealer stands with ' + calcScore(dealerHand).total + '.';
+  updateUI(); await pause(300);
+  settleBets();
+}
+
+function settleBets(){
+  const ds = calcScore(dealerHand).total;
+  [1,2].forEach(pid=>{
+    if(!players[pid].placed) return;
+    const p = players[pid];
+    p.hands.forEach((hand, idx)=>{
+      const betAmount = p.origBets[idx] || p.bet;
+      const ps = calcScore(hand).total;
+      if(p.settledHands[idx]) return; // already auto-paid (blackjack)
+      if(ps>21){
+        // lose
+      } else if(ps===21 && hand.length===2 && ds!==21){
+        const payout = Math.floor(betAmount * 2.5);
+        p.chips += payout;
+        animateChipPayout(pid, payout);
+      } else if(ds>21 && ps<=21){
+        p.chips += betAmount*2;
+        animateChipPayout(pid, betAmount*2);
+      } else if(ps===ds){
+        p.chips += betAmount;
+        // push: return bet (visual)
+        animateChipPayout(pid, betAmount);
+      } else if(ps>ds){
+        p.chips += betAmount*2;
+        animateChipPayout(pid, betAmount*2);
+      } // else lose
+    });
+    p.bet=0; p.placed=false; p.origBets=[]; p.info='Round complete'; p.settledHands = [];
+  });
+  gameInProgress=false; updateUI(); statusEl.textContent += ' Round complete. Press Next Round.'; saveState();
+}
+
+// ========== Player actions ==========
+p1Hit.addEventListener('click', ()=>{ const hand = players[1].hands[turn.handIndex]; if(!hand) return; hand.push(deck.pop()); players[1].info='Hit'; updateUI(); if(calcScore(hand).total>21){ players[1].info='Busted'; advanceTurn() } })
+p1Stand.addEventListener('click', ()=>{ players[1].info='Stand'; advanceTurn(); updateUI(); })
+p1Double.addEventListener('click', ()=>{ const p=players[1]; const hand = p.hands[turn.handIndex]; if(!hand || hand.length!==2) return; const orig = p.origBets[turn.handIndex] || p.bet; if(p.chips < orig) return; p.chips -= orig; p.origBets[turn.handIndex] = orig*2; players[1].info='Doubled'; hand.push(deck.pop()); updateUI(); if(calcScore(hand).total>21) players[1].info='Busted'; advanceTurn(); })
+p1Split.addEventListener('click', ()=>{ const p=players[1]; const hand = p.hands[turn.handIndex]; if(!hand || hand.length!==2) return; if(hand[0].rank!==hand[1].rank) return; const orig = p.origBets[turn.handIndex] || p.bet; if(p.chips < orig) return; p.chips -= orig; p.hands[turn.handIndex] = [hand[0], deck.pop()]; p.hands.splice(turn.handIndex+1,0,[hand[1], deck.pop()]); p.origBets[turn.handIndex] = orig; p.origBets.splice(turn.handIndex+1,0,orig); p.settledHands.splice(turn.handIndex,0,false); players[1].info='Split'; updateUI(); })
+
+p2Hit.addEventListener('click', ()=>{ const hand = players[2].hands[turn.handIndex]; if(!hand) return; hand.push(deck.pop()); players[2].info='Hit'; updateUI(); if(calcScore(hand).total>21){ players[2].info='Busted'; advanceTurn() } })
+p2Stand.addEventListener('click', ()=>{ players[2].info='Stand'; advanceTurn(); updateUI(); })
+p2Double.addEventListener('click', ()=>{ const p=players[2]; const hand = p.hands[turn.handIndex]; if(!hand || hand.length!==2) return; const orig = p.origBets[turn.handIndex] || p.bet; if(p.chips < orig) return; p.chips -= orig; p.origBets[turn.handIndex] = orig*2; players[2].info='Doubled'; hand.push(deck.pop()); updateUI(); if(calcScore(hand).total>21) players[2].info='Busted'; advanceTurn(); })
+p2Split.addEventListener('click', ()=>{ const p=players[2]; const hand = p.hands[turn.handIndex]; if(!hand || hand.length!==2) return; if(hand[0].rank!==hand[1].rank) return; const orig = p.origBets[turn.handIndex] || p.bet; if(p.chips < orig) return; p.chips -= orig; p.hands[turn.handIndex]=[hand[0],deck.pop()]; p.hands.splice(turn.handIndex+1,0,[hand[1],deck.pop()]); p.origBets[turn.handIndex]=orig; p.origBets.splice(turn.handIndex+1,0,orig); p.settledHands.splice(turn.handIndex,0,false); players[2].info='Split'; updateUI(); })
+
+nextRoundBtn.addEventListener('click', ()=>{ dealerHand=[]; dealerHidden=true; gameInProgress=false; players[1].hands=[]; players[2].hands=[]; players[1].info='waiting'; players[2].info='waiting'; updateUI(); statusEl.textContent='Place bets for next round.' })
+resetAllBtn.addEventListener('click', ()=>{ localStorage.removeItem('blackjack_p1'); localStorage.removeItem('blackjack_p2'); resetState(); statusEl.textContent='All reset.' })
+
+function pause(ms){return new Promise(r=>setTimeout(r,ms))}
+
+// ========== Visual helpers: chip payout + banners ==========
+function animateChipPayout(playerId, amount){
+  // show numeric floating chips and update chip count displayed
+  const badge = playerId === 1 ? p1Badge : p2Badge;
+  const chipsEl = playerId === 1 ? p1ChipsEl : p2ChipsEl;
+  const rect = badge.getBoundingClientRect();
+  const tableRect = tablePanel.getBoundingClientRect();
+
+  // create a few flying chips proportional to payout size (capped)
+  const count = Math.min(6, Math.max(1, Math.round(Math.log10(Math.max(1, amount))))) ;
+  for(let i=0;i<count;i++){
+    const c = document.createElement('div');
+    c.className = 'chip-fly';
+    c.textContent = '¢';
+    // position relative to tablePanel
+    tablePanel.appendChild(c);
+    const startX = rect.left - tableRect.left + rect.width/2 - 20 + (i*6 - count*3);
+    const startY = rect.top - tableRect.top + rect.height/2 - 12;
+    c.style.left = startX + 'px'; c.style.top = startY + 'px';
+    // force reflow
+    void c.offsetWidth;
+    // show
+    c.classList.add('show');
+    // remove after animation
+    setTimeout(()=>{ c.classList.remove('show'); c.style.opacity='0'; c.style.transform='translateY(-160px) scale(0.6)'; }, 800);
+    setTimeout(()=>{ if(c && c.parentElement) c.parentElement.removeChild(c); }, 1400);
+  }
+
+  // small numeric pop near chip count
+  const pop = document.createElement('div');
+  pop.style.position='relative'; pop.style.display='inline-block'; pop.style.marginLeft='8px'; pop.style.fontWeight='800'; pop.style.color='var(--gold)';
+  pop.textContent = '+' + amount;
+  chipsEl.parentElement.appendChild(pop);
+  pop.style.opacity='0'; pop.style.transform='translateY(-10px)';
+  setTimeout(()=>{ pop.style.transition='all .9s cubic-bezier(.2,.8,.2,1)'; pop.style.opacity='1'; pop.style.transform='translateY(-30px)'; }, 10);
+  setTimeout(()=>{ pop.style.opacity='0'; pop.style.transform='translateY(-60px)'; }, 1200);
+  setTimeout(()=>{ if(pop && pop.parentElement) pop.parentElement.removeChild(pop); }, 2000);
+}
+
+function showPlayerBjBadge(pid){
+  const badge = pid===1? p1BjBadge : p2BjBadge;
+  badge.classList.add('show');
+  setTimeout(()=> badge.classList.remove('show'), 2200);
+}
+function showGlobalBjBanner(){
   globalBjBanner.classList.add('show');
+  setTimeout(()=> globalBjBanner.classList.remove('show'), 2200);
+}
+
+// ========== Init ==========
+resetState();
+applyTheme(localStorage.getItem('blackjack_theme') || 'emerald', true);
+</script>
+</body>
+</html>
+List.add('show');
   setTimeout(()=> globalBjBanner.classList.remove('show'), 2200);
 }
 
